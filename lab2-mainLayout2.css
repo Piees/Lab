@@ -1,0 +1,77 @@
+#navigation{
+	width:140px;
+}
+
+#navigation table{
+	width:100%;
+	font-size: small;
+}
+
+#navigation input{
+	width:100%;
+}
+
+#content{
+	background-color:white;
+}
+
+#brett {
+    cursor: move;
+    border-width: 3px;
+    border-style: solid;
+    z-index: 1;
+    width: 400px;
+    height: 400px;
+    background-color: grey;
+    float: left;
+    position:relative;
+    left:0px;
+    top: 0px;
+
+}
+#canvas {
+    background: rgba(0, 0, 0, 0.0);
+    pointer-events: none;
+   position:absolute;
+    z-index:4;
+}
+
+.error {
+border-color: red;
+}
+
+img {
+	z-index:3;
+}
+
+#logwindow {
+	font-size: small;
+}
+
+.undoLog:hover {
+	background-color: yellow;
+}
+
+
+
+	
+.white {
+	background-color: white;
+
+}
+
+.lightgrey {
+	background-color: lightgrey;
+
+}
+
+	
+.selected { 
+	background-color:#FFFF99;	
+ }
+ 
+
+.redturn {
+	transform: rotate(180deg); 	
+}
+ 
