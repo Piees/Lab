@@ -52,6 +52,7 @@ $(document).ready(function() {
                 // Deres kode her	DRAW BOARD
 
 					drawBoard();
+				//	$(divId).css("background-color", "yellow");
 					//drawLine();
 					/*$('img').mouseup(function(){
 					denne = this.id;
@@ -66,6 +67,7 @@ $(document).ready(function() {
 
 	board.addEventListener('promote',function (e) {
 		// Deres kode her
+		drawBoard();
 	},true);
 
 	// Man m� ogs� skrive kode i disse hendelses funksjonene
@@ -103,6 +105,11 @@ $(document).ready(function() {
 	});
 
 	$("#btnKingRandomly").click(function(evt) {
+		randomChecker = board.getRandomNonKing();
+		board.promote(randomChecker);
+	});
+
+	$("#btnKingSel").click(function(evt) {
 		randomChecker = board.getRandomNonKing();
 		board.promote(randomChecker);
 	});
@@ -148,7 +155,7 @@ function drawBoard(){
     //bestemmer rad
     for (i=0; i<BOARD_SIZE; i++) {
 		var divColor;
-		//Bruker % operat�r for � finne ut om "i" er oddetall eller partall
+		//Bruker % operatør for å finne ut om "i" er oddetall eller partall
 		if ((i%2 == 1) && (j%2 == 1)) {
 			divColor = "white";
 		} else if ((i%2 == 0) && (j%2 == 1)){
@@ -183,37 +190,28 @@ $('img').draggable({
 	$("#r"+cellId[8]+"c"+cellId[10]).css('background-color', 'yellow');
 
 	console.log(posId);
-	/*while (cellId == !(undefined)){
-	//	posId.push(cellId)
-		posId = cellId;
-	}*/
 	},
 	containment:'#content',
 	revert: true,
 		stop: function(event,ui){
 
 		drawBoard();
-	/*	denne = this.id;
-		$("#r"+denne[8]+"c"+denne[10]).addClass('highlighteddiv');*/
-
-
-//$('img').mousedown(function(){
-	//posId.push(cellId);
-	//console.log(posId);
-//});
 	},
 	start: function(event,ui){
-		posId = this.id;
+	/*	posId = this.id;
+		$('#brikke_r'+posId[8]+'c'+posId[10]).css("background-color", "yellow" );*/
 	},
+
 });
+$('img').mousedown(function(){
+	posId = this.id;
+	$('img').removeClass('selecteddiv');
+	$('#brikke_r'+posId[8]+'c'+posId[10]).addClass('selecteddiv');
+});
+
 $('#checkerClear').click(function(){
-
-	/*	$('#brikke_r'+divId[1]+'c'+divId[3]).remove();
-board.removeAt(divId[1],divId[3]);*/
-
 $('#brikke_r'+posId[8]+'c'+posId[10]).remove();
 board.removeAt(posId[8],posId[10]);
-		//console.log(currentPos);
 });
 
 
@@ -269,6 +267,34 @@ $("#r"+j+"c"+i).droppable({
 	});*/
 
 
+if (2>3){
+	$('#btnRemoveChecker').prop('disabled')
+}
+/*janis gjør ting , denne må inn i if(ruten)??
+var div = "#r"+j+"c"+i;
+$(div).mousedown(function(evt){
+	$('#btnRemoveChecker').removeAttr("disabled");
+});
+
+
+var currentDiv = $(this).attr('id'); //dette er for å lagre hvor den er blitt lagt ned
+
+
+
+var lastSelRow= undefined;
+var lastSelCol = undefined;
+
+if((lastSelRow !=undefined) && (lastSelCol !=undefined)){
+console.log('not undefined');
+} else {
+console.log('undefined');
+}
+window.onmousedown(function(evt){
+	var pos = $(this).position();
+	console.log('top = '+ post.top);
+}
+
+*/
 
 }}
 };
@@ -303,6 +329,8 @@ $("#r"+j+"c"+i).droppable({
 		}*/
 
 
+
+/*
 // Get the position of a div
 var divPosition = function (div) {
     var bredde = $(div).width();
@@ -382,10 +410,7 @@ window.drawArrowhead = function (ctx, x, y, radians) {
     ctx.restore();
 }
 
-
-
-
-
+*/
 
 
 
@@ -470,10 +495,10 @@ window.drawArrowhead = function (ctx, x, y, radians) {
 	<tr>
 		<td id="navigation">
 			<table>
-				<tr><td><input id="btnNewGame" type="button" name="new" value="Spill p� nytt"/></td></tr>
+				<tr><td><input id="btnNewGame" type="button" name="new" value="Spill på nytt"/></td></tr>
 				<tr><td><input id="btnMoveRandomly" type="button" name="moveRandomly" value="Tilfeldig trekk"/></td></tr>
 				<tr><td><input id="btnKingRandomly" type="button" name="kingRandomly" value="Tilfeldig konge"/></td></tr>
-				<tr><td><input id="btnClear" type="button" name="clear" value="T�m brettet"/></td></tr>
+				<tr><td><input id="btnClear" type="button" name="clear" value="Tøm brettet"/></td></tr>
 				<tr><td><input id="checkerClear" type="button" name="clear" value="Fjern Forrige Brikke"/></td></tr>
 			</table>
 		</td>

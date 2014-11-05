@@ -1,26 +1,26 @@
 /**
- * Klasse "Board" representerer en tilstand for en dambrett. 
+ * Klasse "Board" representerer en tilstand for en dambrett.
  * Dambrett er en kvadratisk tabell (array) av et visst antall mindre kvadrater.
  * Vanlig størrelse for en dambrett er 8x8 kvadradrater, men klassen "Board"
  * kan representere dambrett av vilkårlig størrelse (ikke uendelig).
- * 
- * Hvert kvadrat på dambrettet kan enten inneholde en brikke, representert 
+ *
+ * Hvert kvadrat på dambrettet kan enten inneholde en brikke, representert
  * med klassen "Checker", eller være tom.
  *
  * Hvert kvadrat kan identifiseres med en rad og en kolonne, som er nummerert
  * fra 0 til "size-1" (det totale antallet subtrahert 1).
  *
- * Kvadratet [0,0] er i det venstre øverste hjørne på dambrettet. 
+ * Kvadratet [0,0] er i det venstre øverste hjørne på dambrettet.
  * Rader er nummerert nedover, og kolonner er nummerert til høyre.
  *
  * Kvadratet [0,0] er hvit og hvite og svarte kvadrater alternerer over hver
- * rad og hver kolonne. 
- * 
- * Dambrett kan forandres, - brikker kan legges til og fjernes, samt de kan 
+ * rad og hver kolonne.
+ *
+ * Dambrett kan forandres, - brikker kan legges til og fjernes, samt de kan
  * flyttes (størrelsen til dambrettet kan ikke forandres under utførelsen
- * av programmet). 
- * 
- * "Board" er i stand til å sende tre typer hendelser, - henholdsvis "add", 
+ * av programmet).
+ *
+ * "Board" er i stand til å sende tre typer hendelser, - henholdsvis "add",
  * "remove" og "move"
  *
  * Hendelses parameter i alle tre tilfeller er av typen "BoardEvent".
@@ -35,7 +35,7 @@
 //		checkRep
 //		isValidLocation(row, col)
 //		isEmptyLocation(row, col)
-// 		
+//
 //
 var Board = function(size) {
     ////////////////////////////////////////////////
@@ -44,7 +44,7 @@ var Board = function(size) {
 
     // "boardSize" er antall kvadrater på en side av dambrettet (8 er vanlig)
     this.boardSize = size;
-    
+
     // "square" er en todimensjonell tabell som representerer dambrettet
     // "square[row][col]" er brikken ("Checker") i kvadraten eller null, hvis kvadraten er tom
     this.square = new Array(this.boardSize);
@@ -52,7 +52,7 @@ var Board = function(size) {
     for (var i=0; i<=this.boardSize; i++){
 		this.square[i] = [];
 	}
-    
+
 	// hvis "true" så en representasjons-uavhengig kontroll er mulig
     this.doCheckRep = true;
 
@@ -68,10 +68,10 @@ var Board = function(size) {
             }
         }
     }
-    
+
     /*
 	 * Tester om rad og kolonne identifiserer et kvadrat.
-     * @throws Genererer Feil hvis enten rad eller kolonne 
+     * @throws Genererer Feil hvis enten rad eller kolonne
      * ligger utenfor området [0,size-1]
      */
     this.isValidLocation = function(row, col) {
@@ -99,11 +99,11 @@ var Board = function(size) {
         	alert(s);
         }
     }
-    
+
     ////////////////////////////////////////////////
     // Metoder som kan brukes av andre klasser (public methods)
     //
-    
+
     /**
      * board.size er antall av kvadrater på hver side av dambrettet
      */
@@ -120,9 +120,9 @@ var Board = function(size) {
 	        return this.square[row][col];
 	    }
     }
-    
+
     /**
-     * Få koordinater til en brikke (rad og kolonne) hvis det finnes 
+     * Få koordinater til en brikke (rad og kolonne) hvis det finnes
      * på brettet, eller null hvis brikken ikke finnes på brettet.
      */
     this.getLocationOf  = function(checker){
@@ -144,71 +144,71 @@ var Board = function(size) {
 
     	return results;
     }
-    
+
 	/**
-     * Legg til en ny brikke på brettet. Det kreves at brikken er ikke på 
+     * Legg til en ny brikke på brettet. Det kreves at brikken er ikke på
      * på brettet fra før, og (row,col) må være et tomt kvadrat.
 	 */
 	this.add = function(checker, row, col){
 		if (this.isEmptyLocation(row,col)){
 
 			var details = {checker:checker, row:row, col:col};
-						
+
 			checker.row = row;
 			checker.col = col;
-			
+
 			this.square[row][col] = checker;
-	    
+
 			// representasjons-uavhengig kontroll bør være tilfredstillt her,
 			// før man starter å sende ut hendelser
 			this.checkRep();
-			
+
 			this.dispatchBoardEvent("add", details);
 		}
-	} 
-	
+	}
+
 	/**
 	 * Flytte en brikke fra et kvadrat til et annet kvadrat på brettet.
-	 * Det kreves at brikken finnes på brettet og at (toRow,toCol) 
+	 * Det kreves at brikken finnes på brettet og at (toRow,toCol)
      * er et korrekt tomt kvadrat.
 	 */
 	this.moveTo = function(checker, toRow, toCol){
 		if (this.isEmptyLocation(toRow,toCol)){
 
 			var details = {checker:checker, toRow:toRow, toCol:toCol, fromRow:checker.row, fromCol:checker.col};
-		
+
 			delete this.square[checker.row][checker.col];
 			this.square[toRow][toCol] = checker;
-			
+
 			if (this.canBeKing(checker, toRow, toCol)){
 				this.promote(checker);
 			}
-	    
+
 			checker.row = toRow;
 			checker.col = toCol;
-			
+
 			// representasjons-uavhengig kontroll bør være tilfredstillt her,
 			// før man starter å sende ut hendelser
 			this.checkRep();
-			
+
 			this.dispatchBoardEvent("move", details);
 		}
 	}
-	
+
 	/**
-	 * Fjern en brikke fra dette brettet. Det kreves at brikken finnes 
+	 * Fjern en brikke fra dette brettet. Det kreves at brikken finnes
 	 * på bordet.
 	 */
 	this.remove = function(checker) {
 		var details = {checker:checker, row:checker.row, col:checker.col};
-			
+
 		delete this.square[checker.row][checker.col];
 
 		this.checkRep();
-		
-		this.dispatchBoardEvent("remove", details);			
+
+		this.dispatchBoardEvent("remove", details);
 	}
-	
+
 	/**
 	 * Fjern en brikke som befinner seg på en spesifikk posisjon på brettet fra brettet.
      * Det kreves at brikken finnes på brettet.
@@ -216,19 +216,19 @@ var Board = function(size) {
 	this.removeAt = function(row, col) {
 		if (!this.square[row][col]){
 			alert("no checker at " + r + "," + c);
-			
+
 		} else {
 			var details = {checker:this.square[row][col], row:row, col:col};
-					
+
 			delete this.square[row][col];
-			
+
 			this.checkRep();
-			
-			this.dispatchBoardEvent("remove", details);		
+
+			this.dispatchBoardEvent("remove", details);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Fjerne alle brikkene fra brettet.
 	 */
@@ -241,7 +241,7 @@ var Board = function(size) {
             }
         }
 	}
-	
+
 	/**
 	 * Gjør en brikke til "konge"-brikken
 	 */
@@ -249,14 +249,14 @@ var Board = function(size) {
 		checker.isKing = true;
 		this.dispatchBoardEvent("promote", {checker:checker});
 	}
-	
+
 
     ////////////////////////////////////////////////
     // Grensesnitt som "fanger opp" grensesnitt (events listening interface).
     //
 
 	this.allHandlers = new Array();
-	
+
 	/**
      * Send ut en ny hendelse til alle hendelses "listeners" av den spesifiserte typen
 	 */
@@ -284,25 +284,25 @@ var Board = function(size) {
     ////////////////////////////////////////////////
     // Verktøy
     //
-    
+
 	/**
 	 * Forbereder et nytt brett med standard innstillinger
 	 */
 	this.prepareNewGame = function(){
 		this.checkRep();
-		
+
 		this.clear();
-		
+
 		//red above, black below
 		for (var i=0; i<this.boardSize; i++){
 			var chkRed = new Checker("red", false);
 			var chkBlack = new Checker("black", false);
-			
+
 			this.add(chkRed, (1 - i%2), i);
 			this.add(chkBlack , (this.boardSize - 1 - i%2), i);
 		}
 	}
-	
+
 	/**
 	 * Finn en tilfeldig brikke
 	 * Returner en "checker" objekt
@@ -313,7 +313,7 @@ var Board = function(size) {
 			return allCheckers[Math.floor(Math.random() * allCheckers.length)];
 		}
 	}
-	
+
 	/**
 	 * Finn en tilfelding ikke-"konge" brikke
 	 * Return en "checker" objekt
@@ -326,15 +326,15 @@ var Board = function(size) {
 				allNonKings.push(allCheckers[i]);
 			}
 		}
-		
+
 		if (allNonKings){
 			return allNonKings[Math.floor(Math.random() * allNonKings.length)];
 		}
 	}
-	
+
 	/**
 	 * Finn en tilfelding tomt kvadrat
-	 * Returnerer {row, col} 
+	 * Returnerer {row, col}
 	 */
 	this.getRandomEmptyLocation = function(){
 		var availLocs = [];
@@ -350,21 +350,21 @@ var Board = function(size) {
 			return availLocs[Math.floor(Math.random() * availLocs.length)];
 		}
 	}
-	
+
 	/**
 	 * Sjekke om en brikke kan bli konge på den spesifiserte posisjonen
-	 */		
+	 */
 	this.canBeKing = function(checker, row, col){
 		if (checker.color == "red"){
 			return row == this.boardSize - 1;
 		} else {
 			return row == 0;
 		}
-	}	
-			
+	}
+
     /**.
 	 * Få en string representasjon for brettet som en flerlinje matrise.
-	 * 
+	 *
      */
     this.toString = function() {
     	var result = "";
@@ -380,5 +380,10 @@ var Board = function(size) {
             result += "<br/>";
         }
         return result.toString();
-    }  
+    }
+    //holder siste move
+    this.lastMove = function(){
+      var lMove;
+      return lMove[0] + lMove[1];
+    }
 }

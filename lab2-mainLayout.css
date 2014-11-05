@@ -22,11 +22,13 @@
 	border-radius:100%;
 	border:yellow solid 4px;
 	z-index: 9999;
+/*  box-shadow: 0px 0px 0px 8px rgba(0,0,0,0.4);*/
 }
 .highlighteddiv {
 	background-color: yellow !important;
-
-
+}
+.selecteddiv {
+	background-color: yellow;
 }
 
 div .ui-selecting { background: #FECA40; }
