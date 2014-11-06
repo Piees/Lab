@@ -16,6 +16,16 @@
 	height:400px;
 	border: 1px solid black;
 	margin:none;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+#keybinds{
+	background-color:white;
+	width:150px;
+	height:150px;
+	border: 2px solid black;
+	float:right;
+	border-radius: 20px;
 }
 
 .highlighted {

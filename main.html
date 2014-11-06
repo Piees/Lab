@@ -83,14 +83,9 @@ $(document).ready(function() {
 		randomChecker = board.getRandomChecker();
 		randomLoc = board.getRandomEmptyLocation();
 		plswork = true;
-		//console.log(randomLoc);
-	/*	if (randomChecker && randomLoc && (((randomLoc["row"]%2 == 0) && (randomLoc["col"]%2 == 1)) || ((randomLoc["row"]%2 == 1) && (randomLoc["col"]%2 == 0)))){
-		board.moveTo(randomChecker, randomLoc.row, randomLoc.col);
-		}*/
 		var fromRow = randomChecker.row;
 		var fromCol = randomChecker.col;
 		while (plswork && board.getAllCheckers) {
-		// console.log(board.getAllCheckers);
 
 		randomLoc = board.getRandomEmptyLocation();
 		if (randomChecker && randomLoc && (((randomLoc["row"]%2 == 0) && (randomLoc["col"]%2 == 1)) || ((randomLoc["row"]%2 == 1) && (randomLoc["col"]%2 == 0)))){
@@ -121,9 +116,47 @@ $(document).ready(function() {
 		board.clear();
 	});
 
+//http://api.jquery.com/event.which/ var ideen bak keybinds til spillet
+
+
+	$(document).on('keydown', function(e){
+	if(e.which==82){//r gjør spill på nytt
+		board.prepareNewGame();
+		drawBoard();
+	} else if(e.which==84){//t gjør tilfeldig trekk
+		randomChecker = board.getRandomChecker();
+		randomLoc = board.getRandomEmptyLocation();
+		plswork = true;
+		var fromRow = randomChecker.row;
+		var fromCol = randomChecker.col;
+		while (plswork && board.getAllCheckers) {
+			randomLoc = board.getRandomEmptyLocation();
+			if (randomChecker && randomLoc && (((randomLoc["row"]%2 == 0) && (randomLoc["col"]%2 == 1)) || ((randomLoc["row"]%2 == 1) && (randomLoc["col"]%2 == 0)))){
+				board.moveTo(randomChecker, randomLoc.row, randomLoc.col);
+				plswork = false;
+			}
+		}
+	} else if(e.which==75){//k gjør tilfeldig konge
+		randomChecker = board.getRandomNonKing();
+		board.promote(randomChecker);
+	} else if(e.which==66){//b gjør tøm brettet
+		board.clear();
+	} else if(e.which==70){//f gjør flern selektert brikke
+		/*$('#brikke_r'+posId[8]+'c'+posId[10]).remove();
+		board.removeAt(posId[8],posId[10]);*/
+
+		var select = $('.selecteddiv').attr('id');
+		board.removeAt(select[8],select[10]);
+		$('.selecteddiv').remove();
+	} else if(e.which==71){//g gjør gjør til konge
+		board.promote(board.getCheckerAt(posId[8],posId[10]));
+	}
+});
+
+
 	board.prepareNewGame();
 
-				// Deres kode her. jeg m� skrive hva som skjer n�r jeg trykker p� spill p� nytt
+				// Deres kode her.
 
 drawBoard();
 
@@ -227,8 +260,9 @@ $('div').mousedown(function(){
 
 
 $('#checkerClear').click(function(){
-$('#brikke_r'+posId[8]+'c'+posId[10]).remove();
-board.removeAt(posId[8],posId[10]);
+var select = $('.selecteddiv').attr('id');
+board.removeAt(select[8],select[10]);
+$('.selecteddiv').remove();
 });
 
 
@@ -532,18 +566,19 @@ $.extend({
 	<tr>
 		<td id="navigation">
 			<table>
-				<tr><td><input id="btnNewGame" type="button" name="new" value="Spill på nytt"/></td></tr>
-				<tr><td><input id="btnMoveRandomly" type="button" name="moveRandomly" value="Tilfeldig trekk"/></td></tr>
-				<tr><td><input id="btnKingRandomly" type="button" name="kingRandomly" value="Tilfeldig konge"/></td></tr>
-				<tr><td><input id="btnClear" type="button" name="clear" value="Tøm brettet"/></td></tr>
-				<tr><td><input id="checkerClear" type="button" name="clear" value="Fjern Selektert Brikke"/></td></tr>
-				<tr><td><input id="btnKingSel" type="button" name="clear" value="Gjør til konge"/></td></tr>
+				<tr><td><input id="btnNewGame" type="button" name="new" value="Spill på nytt (r)"/></td></tr>
+				<tr><td><input id="btnMoveRandomly" type="button" name="moveRandomly" value="Tilfeldig trekk (t)"/></td></tr>
+				<tr><td><input id="btnKingRandomly" type="button" name="kingRandomly" value="Tilfeldig konge (k)"/></td></tr>
+				<tr><td><input id="btnClear" type="button" name="clear" value="Tøm brettet (b)"/></td></tr>
+				<tr><td><input id="checkerClear" type="button" name="clear" value="Fjern Selektert Brikke (f)"/></td></tr>
+				<tr><td><input id="btnKingSel" type="button" name="clear" value="Gjør til konge (g)"/></td></tr>
 			</table>
 		</td>
 
 		<td id="content">
-			<!-- Din kode her  -->
+
 		</td>
+
 	</tr>
 
 	</table>
