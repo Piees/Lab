@@ -3,6 +3,8 @@
 <!--
 	SAMARBEIDET MED:
 	Yngve O Ranestad
+
+	Testet i: chrome og ie
 -->
 
 <html>
@@ -20,7 +22,6 @@
 <script type="text/javascript" src="lab2-boardEvent.js"></script>
 <script type="text/javascript" src="lab2-board.js"></script>
 <script type="text/javascript" src="canvasutilities.js"></script>
-
 <script type="text/javascript">
 	var DEFAULT_BOARD_SIZE = 8;
 	var BOARD_SIZE;
@@ -31,21 +32,16 @@
 	//hvor man har bevegd fra
 	var posId;
 	var board;
-
 // JavaScript kode i denne blokken kjøres kun når siden i sin helhet er blitt
 // lastet inn i nettleseren.
 $(document).ready(function() {
-
 	if ($.getUrlVar('size') && $.getUrlVar('size') >= 8){
 		board = new Board($.getUrlVar('size'));
 	} else {
 		board = new Board(DEFAULT_BOARD_SIZE);
 	}
-
-
 	board.addEventListener('add',function (e) {
 	},true);
-
 	board.addEventListener('move',function (e) {
 					//skriver border på nytt
 					drawBoard();
@@ -57,19 +53,15 @@ $(document).ready(function() {
 					$("#moves").append( '<p id="movesp">Brikke på rad '+posId[8]+', kollone '+posId[10]+' til rad '+divId[1]+' og posisjon '+divId[3]+'</p>' );
 					*/
 	},true);
-
 	board.addEventListener('remove',function (e) {
 		drawBoard();
 	},true);
-
 	board.addEventListener('promote',function (e) {
 		drawBoard();
 	},true);
-
 	$("#btnNewGame").click(function(evt) {
 		board.prepareNewGame();
 	});
-
 	$("#btnMoveRandomly").click(function(evt) {
 		//variabel for random checker
 		randomChecker = board.getRandomChecker();
@@ -81,7 +73,6 @@ $(document).ready(function() {
 		posId = 'brikke_r'+randomChecker['row']+'c'+randomChecker['col'];
 		//sørger for at den ikke flytter til hvit rute
 		while (switcher && board.getAllCheckers) {
-
 			randomLoc = board.getRandomEmptyLocation();
 			if (randomChecker && randomLoc && (((randomLoc["row"]%2 == 0) && (randomLoc["col"]%2 == 1)) || ((randomLoc["row"]%2 == 1) && (randomLoc["col"]%2 == 0)))){
 			//setter globale divId på nye posisjon for å brukes i å tegne piler
@@ -92,31 +83,22 @@ $(document).ready(function() {
 			//stopper loop
 			switcher = false;
 			}
-
 		}
-
 	});
-
 	$("#btnKingRandomly").click(function(evt) {
 		//endrer randomnonking til konge i modellen som trigger eventlistener som drawboarder
 		randomChecker = board.getRandomNonKing();
 		board.promote(randomChecker);
 	});
-
 	$("#btnKingSel").click(function(evt) {
 		//finner id til diven som er markert og promoter den som fører inn i eventlistener
 		var select = $('.selecteddiv').attr('id');
 		board.promote(board.getCheckerAt(select[8],select[10]));
 	$('.selecteddiv').remove();
 	});
-
 	$("#btnClear").click(function(evt) {
 		board.clear();
 	});
-
-
-
-
 	var drawLine = function(fromR, fromC, toLoc) {
   	// http://stackoverflow.com/questions/10433046/creating-a-canvas-element-and-setting-its-width-and-height-attributes-using-jque
 		//legger canvas over content og endres i css for å ikke ha pointer-events
@@ -151,7 +133,6 @@ $(document).ready(function() {
 						board.moveTo(randomChecker, randomLoc.row, randomLoc.col);
 						switcher = false;
 					}
-
 			}
 		} else if(e.which==75){//k gjør tilfeldig konge
 			randomChecker = board.getRandomNonKing();
@@ -300,8 +281,8 @@ $.extend({
 				<tr><td><input id="btnMoveRandomly" type="button" name="moveRandomly" value="Tilfeldig trekk (t)"/></td></tr>
 				<tr><td><input id="btnKingRandomly" type="button" name="kingRandomly" value="Tilfeldig konge (k)"/></td></tr>
 				<tr><td><input id="btnClear" type="button" name="clear" value="Tøm brettet (b)"/></td></tr>
-				<tr><td><input id="checkerClear" type="button" name="clear" value="Fjern Selektert Brikke (f)" disabled="disabled"/></td></tr>
-				<tr><td><input id="btnKingSel" type="button" name="clear" value="Gjør til konge (g)" disabled="disabled"/></td></tr>
+				<tr><td><input id="checkerClear" type="button" name="clear" value="Fjern Selektert Brikke (f)" /></td></tr>
+				<tr><td><input id="btnKingSel" type="button" name="clear" value="Gjør til konge (g)" /></td></tr>
 			</table>
 		</td>
 
